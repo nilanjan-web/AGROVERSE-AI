@@ -216,23 +216,6 @@
     "popup": "Purulia Farm Location",
     "imagery": "Satellite Imagery"
   },
-  "insights": {
-    "title": "AI Farm Map Insights",
-    "subtitle": "Satellite-powered farmland monitoring",
-    "ndviTitle": "Vegetation Health (NDVI)",
-    "ndviText": "Satellite vegetation index for your selected farmland.",
-    "low": "Low",
-    "moderate": "Moderate",
-    "healthy": "Healthy",
-    "high": "High",
-    "waitingSat": "Waiting for satellite analysis",
-    "healthTitle": "Crop Health Visualization",
-    "healthText": "Spatial crop health information across your field.",
-    "waitingHealth": "Waiting for crop health data",
-    "waterTitle": "Water Stress Detection",
-    "waterText": "Satellite-based indication of possible water stress.",
-    "waitingWater": "Waiting for water stress analysis"
-  },
   "advisor": {
     "title": "AI Farming Advisor",
     "subtitle": "Get helpful guidance for your farming decisions.",
