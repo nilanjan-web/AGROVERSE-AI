@@ -2,10 +2,7 @@
 import { useState } from 'react'
 import useLabels from '../../hooks/useLabels'
 import {
-  seasons,
-  seasonMeta,
   cropOptions,
-  cropsBySeason,
   cropEmoji
 } from '../../data/crops'
 
@@ -48,7 +45,6 @@ export default function CropRotation() {
   const { t, tCrop, cropLabel } = useLabels()
 
   const [selectedCrops, setSelectedCrops] = useState([])
-  const [selectedRotationSeasons, setSelectedRotationSeasons] = useState([])
   const [rotationResult, setRotationResult] = useState(null)
 
   const [latitude, setLatitude] = useState('')
@@ -195,87 +191,44 @@ if (firstSeasonCrops.length === 0) {
       <p>{t('rotation.subtitle')}</p>
 
       <div className="profile-card">
-        <h3>🌦️ {t('rotation.selectSeasons')}</h3>
+       <h3>🌾 Select Your Preferred Crops</h3>
 
-        <div className="crop-grid">
-          {seasons.map((season) => (
-            <button
-              key={season}
-              type="button"
-              className={
-                selectedRotationSeasons.includes(season)
-                  ? 'crop-option selected'
-                  : 'crop-option'
-              }
-              onClick={() =>
-                setSelectedRotationSeasons((prev) =>
-                  prev.includes(season)
-                    ? prev.filter((s) => s !== season)
-                    : [...prev, season]
-                )
-              }
-            >
-              {selectedRotationSeasons.includes(season)
-                ? '✅ '
-                : seasonMeta[season].emoji + ' '}
+<p>
+  Select the crops you are interested in.
+  The planner will generate a rotation across
+  Kharif, Rabi and Zaid seasons.
+</p>
 
-              {t('seasons.' + season)}
-            </button>
-          ))}
-        </div>
+<div className="crop-grid">
+  {cropOptions.map((crop) => (
+    <button
+      key={crop.en}
+      type="button"
+      className={
+        selectedCrops.includes(crop.en)
+          ? 'crop-option selected'
+          : 'crop-option'
+      }
+      onClick={() =>
+        setSelectedCrops((prev) =>
+          prev.includes(crop.en)
+            ? prev.filter((c) => c !== crop.en)
+            : [...prev, crop.en]
+        )
+      }
+    >
+      {selectedCrops.includes(crop.en)
+        ? '✅ '
+        : (cropEmoji[crop.en] || '🌱 ')}
 
-        <h3>🌾 {t('rotation.selectCrops')}</h3>
+      {cropLabel(crop)}
+    </button>
+  ))}
+</div>
 
-        {selectedRotationSeasons.length === 0 && (
-          <p>{t('rotation.pickSeasonHint')}</p>
-        )}
-
-        {selectedRotationSeasons.map((season) => (
-          <div key={season} className="crop-category">
-            <h4>
-              {seasonMeta[season].emoji}{' '}
-              {t('rotation.seasonCrops', {
-                season: t('seasons.' + season)
-              })}
-            </h4>
-
-            <div className="crop-grid">
-              {cropOptions
-                .filter((crop) =>
-                  cropsBySeason[season].includes(crop.en)
-                )
-                .map((crop) => (
-                  <button
-                    key={`${season}-${crop.en}`}
-                    type="button"
-                    className={
-                      selectedCrops.includes(crop.en)
-                        ? 'crop-option selected'
-                        : 'crop-option'
-                    }
-                    onClick={() =>
-                      setSelectedCrops((prev) =>
-                        prev.includes(crop.en)
-                          ? prev.filter((c) => c !== crop.en)
-                          : [...prev, crop.en]
-                      )
-                    }
-                  >
-                    {selectedCrops.includes(crop.en)
-                      ? '✅ '
-                      : cropEmoji[crop.en] + ' '}
-
-                    {cropLabel(crop)}
-                  </button>
-                ))}
-            </div>
-          </div>
-        ))}
-
-        <p>
-          {t('common.selectedSeasons')}:{' '}
-          <strong>{selectedRotationSeasons.length}</strong>
-        </p>
+<p>
+  Selected Crops: <strong>{selectedCrops.length}</strong>
+</p>
 
         <p>
           {t('common.selectedCrops')}:{' '}

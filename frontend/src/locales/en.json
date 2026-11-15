@@ -195,7 +195,7 @@
   },
   "rotation": {
     "title": "AI Crop Rotation Planner",
-    "subtitle": "Select one or more seasons and the crops you want the planner to consider.",
+   "subtitle": "Select your preferred crops to explore a three-season crop rotation plan.",
     "selectSeasons": "Select Seasons",
     "selectCrops": "Select Crops by Season (English + বাংলা)",
     "pickSeasonHint": "Please select at least one season to see its suitable crops.",
