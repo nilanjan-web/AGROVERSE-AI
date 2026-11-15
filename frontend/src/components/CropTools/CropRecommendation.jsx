@@ -43,7 +43,7 @@ const [longitude, setLongitude] = useState('')
 
   return (
     <section className="crop-recommendation">
-      <h2 id="crop-recommendation">{t('nav.cropRecommendation')}</h2>
+      <h2>{t('nav.cropRecommendation')}</h2>
       <p>{t('recommendation.subtitle')}</p>
       <div className="profile-card">
         <h3>🌾 {t('recommendation.cardTitle')}</h3>
@@ -73,6 +73,7 @@ const [longitude, setLongitude] = useState('')
 
 <button
   type="button"
+  className="location-select-button"
   onClick={() => {
     if (!navigator.geolocation) {
       setError('আপনার ডিভাইসে লোকেশন সুবিধা নেই।')
@@ -99,7 +100,12 @@ const [longitude, setLongitude] = useState('')
 {latitude && longitude && (
   <p>✅ লোকেশন পাওয়া গেছে। এবার ফসলের পরামর্শ নিন।</p>
 )}
-        <button type="button" onClick={getRecommendation} disabled={loading}>
+        <button
+          type="button"
+          className="recommendation-submit-button"
+          onClick={getRecommendation}
+          disabled={loading}
+        >
           {loading ? t('recommendation.loading') : t('recommendation.get')}
         </button>
         {error && <div className="recommendation-result recommendation-warning">⚠️ {error}</div>}
