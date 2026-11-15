@@ -113,15 +113,14 @@ const handleAutoLocation = () => {
     const firstSeasonCrops = selectedCrops.filter((crop) =>
       cropsBySeason[firstSeason].includes(crop)
     )
-
-    if (firstSeasonCrops.length < 3) {
-      alert(
-        t('rotation.alertFirstSeason', {
-          season: t('seasons.' + firstSeason)
-        })
-      )
-      return
-    }
+if (firstSeasonCrops.length === 0) {
+  alert(
+    t('rotation.alertFirstSeason', {
+      season: t('seasons.' + firstSeason)
+    })
+  )
+  return
+}
 
     if (
       latitude.trim() === '' ||
