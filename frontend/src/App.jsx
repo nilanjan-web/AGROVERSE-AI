@@ -162,6 +162,21 @@ useEffect(() => {
     setIsProfileModalOpen(false)
   }
 
+  // Scroll the dashboard to the exact section selected in the desktop sidebar.
+  // Using scrollIntoView keeps navigation reliable even when the dashboard is not at the top.
+  const handleSectionNavigation = (event, sectionId) => {
+    event.preventDefault()
+    setActiveMenu(sectionId)
+
+    const section = document.getElementById(sectionId)
+    if (section) {
+      section.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      })
+    }
+  }
+
 const saveAdvisorChat = () => {
   if (advisorMessages.length === 0) return
 
@@ -417,46 +432,64 @@ const askAdvisor = async () => {
             <h2>🌱 AGROVERSE AI</h2>
             <p>{t('sidebar.tagline')}</p>
 
-            <nav>
-              <a href="#dashboard" className="active">🏠 {t('nav.dashboard')}</a>
+            <nav aria-label="Dashboard navigation">
+              <a
+                href="#dashboard"
+                onClick={(event) => handleSectionNavigation(event, 'dashboard')}
+                className={activeMenu === 'dashboard' ? 'active' : ''}
+              >
+                🏠 {t('nav.dashboard')}
+              </a>
+
               <a
                 href="#crop-recommendation"
-                onClick={() => setActiveMenu('crop-recommendation')}
-                className="active"
+                onClick={(event) => handleSectionNavigation(event, 'crop-recommendation')}
+                className={activeMenu === 'crop-recommendation' ? 'active' : ''}
               >
                 🌾 {t('nav.cropRecommendation')}
               </a>
+
               <a
                 href="#crop-rotation"
-                onClick={() => setActiveMenu('crop-rotation')}
-                className="active"
+                onClick={(event) => handleSectionNavigation(event, 'crop-rotation')}
+                className={activeMenu === 'crop-rotation' ? 'active' : ''}
               >
                 🔄 {t('nav.cropRotation')}
               </a>
+
               <a
                 href="#climate-insights"
-                onClick={() => setActiveMenu('climate-insights')}
-                className="active"
+                onClick={(event) => handleSectionNavigation(event, 'climate-insights')}
+                className={activeMenu === 'climate-insights' ? 'active' : ''}
               >
                 🌦️ {t('nav.climateInsights')}
               </a>
-              <a href="#farm-map" className="active">
+
+              <a
+                href="#farm-map"
+                onClick={(event) => handleSectionNavigation(event, 'farm-map')}
+                className={activeMenu === 'farm-map' ? 'active' : ''}
+              >
                 📍 {t('nav.farmMap')}
               </a>
-              <a href="#ai-advisor" className="active">
+
+              <a
+                href="#ai-advisor"
+                onClick={(event) => handleSectionNavigation(event, 'ai-advisor')}
+                className={activeMenu === 'ai-advisor' ? 'active' : ''}
+              >
                 🤖 {t('nav.aiAdvisor')}
               </a>
 
-{user?.role === 'admin' && (
-  <a
-    href="#admin-panel"
-    onClick={() => setActiveMenu('admin-panel')}
-    className="active"
-  >
-    🛡️ Admin Panel
-  </a>
-)}
-
+              {user?.role === 'admin' && (
+                <a
+                  href="#admin-panel"
+                  onClick={(event) => handleSectionNavigation(event, 'admin-panel')}
+                  className={activeMenu === 'admin-panel' ? 'active' : ''}
+                >
+                  🛡️ Admin Panel
+                </a>
+              )}
             </nav>
 
             <h3>{t('sidebar.growSmart1')}<br />{t('sidebar.growSmart2')}</h3>
@@ -901,83 +934,6 @@ const askAdvisor = async () => {
                 </div>
               </div>
             </section>
-
-            <section className="farm-ai-insights">
-              <h2>🤖 {t('insights.title')}</h2>
-              <p className="farm-ai-subtitle">
-                {t('insights.subtitle')}
-              </p>
-
-              <div className="farm-ai-grid">
-                {/* NDVI */}
-                <div className="farm-ai-card">
-                  <span className="farm-ai-icon">🌱</span>
-                  <h3>{t('insights.ndviTitle')}</h3>
-                  <p>{t('insights.ndviText')}</p>
-
-                  <div className="ndvi-visual">
-                    <div className="ndvi-gradient"></div>
-                    <div className="ndvi-labels">
-                      <span>{t('insights.low')}</span>
-                      <span>{t('insights.moderate')}</span>
-                      <span>{t('insights.healthy')}</span>
-                    </div>
-                  </div>
-
-                  <div className="analysis-status">
-                    <span className="status-dot"></span>
-                    {t('insights.waitingSat')}
-                  </div>
-                </div>
-
-                {/* Crop Health */}
-                <div className="farm-ai-card">
-                  <span className="farm-ai-icon">🛰️</span>
-                  <h3>{t('insights.healthTitle')}</h3>
-                  <p>{t('insights.healthText')}</p>
-
-                  <div className="crop-health-preview">
-                    <div className="health-cell health-1"></div>
-                    <div className="health-cell health-2"></div>
-                    <div className="health-cell health-3"></div>
-                    <div className="health-cell health-4"></div>
-                    <div className="health-cell health-5"></div>
-                    <div className="health-cell health-6"></div>
-                    <div className="health-cell health-7"></div>
-                    <div className="health-cell health-8"></div>
-                    <div className="health-cell health-9"></div>
-                  </div>
-
-                  <div className="analysis-status">
-                    <span className="status-dot"></span>
-                    {t('insights.waitingHealth')}
-                  </div>
-                </div>
-
-                {/* Water Stress */}
-                <div className="farm-ai-card">
-                  <span className="farm-ai-icon">💧</span>
-                  <h3>{t('insights.waterTitle')}</h3>
-                  <p>{t('insights.waterText')}</p>
-
-                  <div className="water-stress-visual">
-                    <div className="water-stress-bar">
-                      <div className="water-stress-fill"></div>
-                    </div>
-                    <div className="water-stress-labels">
-                      <span>{t('insights.low')}</span>
-                      <span>{t('insights.moderate')}</span>
-                      <span>{t('insights.high')}</span>
-                    </div>
-                  </div>
-
-                  <div className="analysis-status">
-                    <span className="status-dot"></span>
-                    {t('insights.waitingWater')}
-                  </div>
-                </div>
-              </div>
-            </section> 
 
 <section className="ai-advisor">
   <h2 id="ai-advisor">{t('advisor.title')}</h2>
