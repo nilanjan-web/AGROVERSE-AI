@@ -44,25 +44,28 @@ async def recommend_crops(payload: RecommendationRequest):
     catalog = crop_catalog_service.get_all_crops()
     by_name = {crop.crop_name.casefold().strip(): crop.crop_id for crop in catalog}
     by_id = {crop.crop_id.casefold().strip(): crop.crop_id for crop in catalog}
+  
     matching = {}
     unmatched = []
+
+    aliases = {
+        "rice": "rice",
+        "maize": "maize",
+        "wheat": "wheat",
+        "lentil": "lentil",
+        "mustard": "mustard",
+        "chickpea": "chickpea",
+        "green gram": "green_gram",
+    }
+
     for label in payload.crops:
         key = label.casefold().strip()
-       aliases = {
-    "rice": "rice",
-    "maize": "maize",
-    "wheat": "wheat",
-    "lentil": "lentil",
-    "mustard": "mustard",
-    "chickpea": "chickpea",
-    "green gram": "green_gram",
-}
+        crop_id = (
+            by_name.get(key)
+            or by_id.get(key.replace(" ", "_"))
+            or aliases.get(key)
+        )
 
-crop_id = (
-    by_name.get(key)
-    or by_id.get(key.replace(" ", "_"))
-    or aliases.get(key)
-)
         if crop_id:
             matching[crop_id] = label
         else:
