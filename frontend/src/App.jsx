@@ -657,62 +657,41 @@ const askAdvisor = async () => {
             </section>
 
             <section className="features">
-              <div className="feature-card">
+              <button
+                type="button"
+                className="feature-card feature-card-button"
+                onClick={(event) => handleSectionNavigation(event, 'crop-recommendation')}
+              >
                 <h3>🌾 {t('nav.cropRecommendation')}</h3>
                 <p>{t('featureCards.cropRecText')}</p>
-              </div>
+              </button>
 
-              <div className="feature-card">
+              <button
+                type="button"
+                className="feature-card feature-card-button"
+                onClick={(event) => handleSectionNavigation(event, 'climate-insights')}
+              >
                 <h3>🌦️ {t('nav.climateInsights')}</h3>
                 <p>{t('featureCards.climateText')}</p>
-              </div>
+              </button>
 
-              <div className="feature-card">
+              <button
+                type="button"
+                className="feature-card feature-card-button"
+                onClick={(event) => handleSectionNavigation(event, 'crop-rotation')}
+              >
                 <h3>🔄 {t('nav.cropRotation')}</h3>
                 <p>{t('featureCards.rotationText')}</p>
-              </div>
+              </button>
 
-              <div className="feature-card">
+              <button
+                type="button"
+                className="feature-card feature-card-button"
+                onClick={(event) => handleSectionNavigation(event, 'ai-advisor')}
+              >
                 <h3>🤖 {t('advisor.title')}</h3>
                 <p>{t('featureCards.advisorText')}</p>
-              </div>
-
-              <h2 id="dashboard" className="overview-title">{t('dash.overviewTitle')}</h2>
-
-              <div className="dashboard-grid">
-                <div className="dashboard-card">
-                  <div className="card-icon">🌱</div>
-                  <h3>{t('dash.overviewTitle')}</h3>
-                  <p>📍 {farmLocation || t('dash.locationNotSet')}</p>
-                  <p>🌱 {farmSoil ? tSoil(farmSoil) : t('dash.soilNotSet')}</p>
-                  <p>📏 {landArea ? t('dash.acres', { value: landArea }) : t('dash.areaNotSet')}</p>
-                </div>
-
-                <div className="dashboard-card">
-                  <div className="card-icon">🌦️</div>
-                  <h3>{t('dash.climateStatus')}</h3>
-                  <p>🌡️ {t('climate.temperature')}: {showData(temperature)} °C</p>
-                  <p>🌧️ {t('climate.rainfall')}: {showRain(rainfall)} mm/day</p>
-                  <p>💧 {t('climate.humidity')}: {showData(humidity)} %</p>
-                </div>
-
-                <div className="dashboard-card">
-                  <div className="card-icon">🔄</div>
-                  <h3>{t('nav.cropRotation')}</h3>
-                  <p>🌾 {t('dash.nextCrop')}: {nextCrop ? tCrop(nextCrop) : t('dash.notPlanned')}</p>
-                  <p>🌱 {t('dash.followingCrop')}: {followingCrop ? tCrop(followingCrop) : t('dash.notPlanned')}</p>
-                </div>
-
-                <div className="dashboard-card">
-                  <div className="card-icon">🤖</div>
-                  <h3>{t('advisor.title')}</h3>
-                  <p>
-                    {advisorAnswer
-                      ? t('dash.advisorAvailable')
-                      : t('dash.advisorReady')}
-                  </p>
-                </div>
-              </div>
+              </button>
             </section>
 
             <section className="soil-ph-section">
