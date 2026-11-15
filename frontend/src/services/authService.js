@@ -44,7 +44,7 @@ const normalizedSoil = (s) =>
       })())
 
 const cache = (user) => {
-  sessionStorage.setItem(PROFILE_KEY, JSON.stringify(user))
+localStorage.setItem(PROFILE_KEY, JSON.stringify(user))
   return user
 }
 
@@ -52,7 +52,7 @@ export function getCurrentUser() {
   if (!getAccessToken()) return null
 
   try {
-    return JSON.parse(sessionStorage.getItem(PROFILE_KEY))
+   return JSON.parse(localStorage.getItem(PROFILE_KEY))
   } catch {
     return null
   }
@@ -302,7 +302,7 @@ export async function signOut() {
   }
 
   clearSession()
-  sessionStorage.removeItem(PROFILE_KEY)
+  localStorage.removeItem(PROFILE_KEY)
 
   return { ok: true }
 }
