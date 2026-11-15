@@ -67,10 +67,6 @@ const [activeAdvisorChatId, setActiveAdvisorChatId] = useState(null)
   const [isAdvisorLoading, setIsAdvisorLoading] = useState(false)
   const [nextCrop, setNextCrop] = useState('Pulses')
   const [followingCrop, setFollowingCrop] = useState('Vegetables')
-  const [soilPH, setSoilPH] = useState("");
-  const [soilPHResult, setSoilPHResult] = useState(null);
-  const [soilPHLoading, setSoilPHLoading] = useState(false);
-  const [soilPHError, setSoilPHError] = useState("");
   const [temperature, setTemperature] = useState('Awaiting Data')
   const [rainfall, setRainfall] = useState('Awaiting Data')
   const [humidity, setHumidity] = useState('Awaiting Data')
@@ -162,19 +158,24 @@ useEffect(() => {
     setIsProfileModalOpen(false)
   }
 
-  // Scroll the dashboard to the exact section selected in the desktop sidebar.
-  // Using scrollIntoView keeps navigation reliable even when the dashboard is not at the top.
+  // Navigate to a dashboard section reliably from both the sidebar and feature cards.
   const handleSectionNavigation = (event, sectionId) => {
-    event.preventDefault()
+    event?.preventDefault()
     setActiveMenu(sectionId)
 
     const section = document.getElementById(sectionId)
-    if (section) {
+    if (!section) return
+
+    // Update the hash without causing the browser's default jump, then perform
+    // the controlled smooth scroll. requestAnimationFrame also handles sections
+    // rendered by child components.
+    window.history.replaceState(null, '', `#${sectionId}`)
+    requestAnimationFrame(() => {
       section.scrollIntoView({
         behavior: 'smooth',
         block: 'start'
       })
-    }
+    })
   }
 
 const saveAdvisorChat = () => {
@@ -376,26 +377,6 @@ const askAdvisor = async () => {
     }
   }
 
-  const handleCheckSoilPH = async () => {
-    if (soilPH === "" || Number(soilPH) < 0 || Number(soilPH) > 14) {
-      setSoilPHError("invalid");
-      return;
-    }
-
-    setSoilPHLoading(true);
-    setSoilPHError("");
-    setSoilPHResult(null);
-
-    try {
-      // No /api/soil-ph endpoint exists in the current backend.
-      setSoilPHError('backend');
-    } catch {
-      setSoilPHError('backend');
-    } finally {
-      setSoilPHLoading(false);
-    }
-  };
-
   return (
     <div className="app">
       {/* 🟢 ৪. পেজ সুইচিং লজিক */}
@@ -495,7 +476,7 @@ const askAdvisor = async () => {
             <h3>{t('sidebar.growSmart1')}<br />{t('sidebar.growSmart2')}</h3>
           </aside> 
 
-          <main className="dashboard">
+          <main id="dashboard" className="dashboard">
             {/* Header / Profile Dropdown Section */}
             <header className="dashboard-header" style={{ display: 'flex', justifyContent: 'flex-end', position: 'relative', marginBottom: '20px' }}>
               <div style={{ display: 'flex', alignItems: 'center', marginRight: '12px' }}>
@@ -694,44 +675,6 @@ const askAdvisor = async () => {
               </button>
             </section>
 
-            <section className="soil-ph-section">
-              <h2>{t('soil.title')}</h2>
-              <p>{t('soil.subtitle')}</p>
-
-              <div className="soil-ph-form">
-                <input
-                  type="number"
-                  min="0"
-                  max="14"
-                  step="0.1"
-                  placeholder={t('soil.placeholder')}
-                  value={soilPH}
-                  onChange={(e) => setSoilPH(e.target.value)}
-                />
-
-                <button
-                  onClick={handleCheckSoilPH}
-                  disabled={soilPHLoading || soilPH === ""}
-                >
-                  {soilPHLoading ? t('soil.checking') : t('soil.check')}
-                </button>
-              </div>
-
-              {soilPHError && (
-                <p className="soil-ph-error">{t('soil.error_' + soilPHError)}</p>
-              )}
-
-              {soilPHResult && (
-                <div className="soil-ph-result">
-                  <h3>{t('soil.resultTitle')}</h3>
-                  <p>{t('soil.ph')}: {soilPHResult.ph}</p>
-                  <p>{t('soil.condition')}: {soilPHResult.condition}</p>
-                  <p>{t('soil.suitableCrops')}: {soilPHResult.suitableCrops}</p>
-                  <p>{t('soil.improvement')}: {soilPHResult.improvementTips}</p>
-                </div>
-              )}
-            </section>  
-
             <section className="farm-dashboard">
               <h2>{t('farmDash.title')}</h2>
               <p>{t('farmDash.subtitle')}</p>
@@ -788,12 +731,16 @@ const askAdvisor = async () => {
             </section>
 
 
-            <CropRecommendation />
+            <div id="crop-recommendation" className="dashboard-section-anchor">
+              <CropRecommendation />
+            </div>
 
-            <CropRotation />
+            <div id="crop-rotation" className="dashboard-section-anchor">
+              <CropRotation />
+            </div>
 
-            <section className="climate-insights">
-              <h2 id="climate-insights">{t('climate.title')}</h2>
+            <section id="climate-insights" className="climate-insights">
+              <h2>{t('climate.title')}</h2>
               <p>{t('climate.subtitle')}</p>
 
               <button onClick={getClimateData}>
@@ -873,8 +820,8 @@ const askAdvisor = async () => {
               </div>
             </section>
 
-            <section className="farm-map">
-              <h2 id="farm-map">{t('map.title')}</h2>
+            <section id="farm-map" className="farm-map">
+              <h2>{t('map.title')}</h2>
               <p>{t('map.subtitle')}</p>
 
               <div className="farm-map-card">
@@ -914,8 +861,8 @@ const askAdvisor = async () => {
               </div>
             </section>
 
-<section className="ai-advisor">
-  <h2 id="ai-advisor">{t('advisor.title')}</h2>
+<section id="ai-advisor" className="ai-advisor">
+  <h2>{t('advisor.title')}</h2>
   <p>{t('advisor.subtitle')}</p>
 
   
