@@ -255,27 +255,40 @@ export async function signUp(values) {
 
 // LOGIN
 export async function signIn(email, password) {
+  let session
+
   try {
-    const session = await apiRequest('/auth/login', {
+    session = await apiRequest('/auth/login', {
       method: 'POST',
       body: JSON.stringify({
         email: email.trim(),
         password
       })
     })
-
-    saveSession(session)
-
-    return {
-      ok: true,
-      user: await loadUser(session.user)
-    }
   } catch (error) {
     clearSession()
 
     return {
       ok: false,
       error: classify(error)
+    }
+  }
+
+  saveSession(session)
+
+  try {
+    const user = await loadUser(session.user)
+
+    return {
+      ok: true,
+      user
+    }
+  } catch (error) {
+    console.error('Farm profile loading failed:', error)
+
+    return {
+      ok: false,
+      error: 'Login successful, but farm profile could not load. Please try again.'
     }
   }
 }

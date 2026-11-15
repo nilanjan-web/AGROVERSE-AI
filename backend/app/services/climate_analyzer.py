@@ -631,7 +631,8 @@ class ClimateAnalyzerService:
                               if historical_seasons else 0)
             mean_cold_days = (sum(x["cold_days"] for x in historical_seasons) / len(historical_seasons)
                               if historical_seasons else 0)
-
+            if not historical_seasons:
+             continue
             for crop in crops:
                 t_req = crop.temperature_requirement
                 w_req = crop.water_requirement
