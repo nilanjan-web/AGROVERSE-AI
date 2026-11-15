@@ -85,10 +85,10 @@ const handleAutoLocation = () => {
       return
     }
 
-    if (selectedCrops.length < 3) {
-      alert(t('rotation.alertCrops'))
-      return
-    }
+    if (selectedCrops.length === 0) {
+  alert(t('rotation.alertCrops'))
+  return
+}
 
     const seasonsWithoutCrops = selectedRotationSeasons.filter(
       (season) =>
